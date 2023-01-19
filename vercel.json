@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "jomjom",
+  "builds": [{ "src": "app.js", "use": "@vercel/node" }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "dest": "/app.js"
+    }
+  ]
+}
