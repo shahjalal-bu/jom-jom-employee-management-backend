@@ -6,7 +6,7 @@
     {
       "src": "/(.*)",
       "headers": { "Access-Control-Allow-Origin": "*" },
-      "dest": "/app.js"
+      "dest": "/index.js"
     }
   ]
 }
