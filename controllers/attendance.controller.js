@@ -37,6 +37,15 @@ module.exports.findAll = async (req, res) => {
     return res.status(400).json(e);
   }
 };
+module.exports.UpdateAll = async (req, res) => {
+  try {
+    const fetchedById = await attendanceService.UpdateAll();
+    return res.status(200).json(fetchedById);
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json(e);
+  }
+};
 
 module.exports.getById = async (req, res) => {
   try {

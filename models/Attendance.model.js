@@ -5,15 +5,15 @@ const attendanceSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  present: {
-    type: Boolean,
-    required: true,
-  },
   comment: {
     type: String,
   },
   employeeId: {
     type: String,
+  },
+  attendance: {
+    type: Number,
+    required: true,
   },
 });
 
