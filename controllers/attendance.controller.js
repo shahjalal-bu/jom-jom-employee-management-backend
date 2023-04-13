@@ -28,6 +28,8 @@ module.exports.create = async (req, res) => {
   }
 };
 
+//find all
+
 module.exports.findAll = async (req, res) => {
   try {
     const getData = await attendanceService.findAll();
@@ -37,6 +39,19 @@ module.exports.findAll = async (req, res) => {
     return res.status(400).json(e);
   }
 };
+
+//find with month and year
+
+module.exports.findWithMonthAndYear = async (req, res) => {
+  try {
+    const getData = await attendanceService.findWithMonthAndYear(req);
+    return res.status(200).json(getData);
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json(e);
+  }
+};
+
 module.exports.UpdateAll = async (req, res) => {
   try {
     const fetchedById = await attendanceService.UpdateAll();
@@ -49,7 +64,7 @@ module.exports.UpdateAll = async (req, res) => {
 
 module.exports.getById = async (req, res) => {
   try {
-    const fetchedById = await attendanceService.getById(req.params.id);
+    const fetchedById = await attendanceService.getById(req);
     return res.status(200).json(fetchedById);
   } catch (e) {
     console.error(e);

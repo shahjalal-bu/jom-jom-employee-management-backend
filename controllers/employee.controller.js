@@ -82,11 +82,32 @@ module.exports.findAll = async (req, res) => {
   }
 };
 
+// module.exports.getById = async (req, res) => {
+//   try {
+//     const fetchedById = await employeeService
+//       .getById(req.params.id)
+//       .populate("attendance");
+//     return res.status(200).json(fetchedById);
+//   } catch (e) {
+//     console.error(e);
+//     return res.status(400).json(e);
+//   }
+// };
 module.exports.getById = async (req, res) => {
+  const yearInt = parseInt(req.query.year);
+  const monthInt = parseInt(req.query.month);
   try {
-    const fetchedById = await employeeService
-      .getById(req.params.id)
-      .populate("attendance");
+    const fetchedById = await employeeService.getById(req.params.id).populate({
+      path: "attendance",
+      match: {
+        $expr: {
+          $and: [
+            { $eq: [{ $year: "$date" }, yearInt] },
+            { $eq: [{ $month: "$date" }, monthInt] },
+          ],
+        },
+      },
+    });
     return res.status(200).json(fetchedById);
   } catch (e) {
     console.error(e);
