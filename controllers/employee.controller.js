@@ -61,6 +61,9 @@ async function uploadFile(req, res) {
     console.log(error);
   }
 }
+
+//TODO: Create a employee
+
 module.exports.create = async (req, res) => {
   try {
     await uploadFile(req, res);
@@ -71,6 +74,33 @@ module.exports.create = async (req, res) => {
     });
   }
 };
+
+// // update employee salary
+
+// const Employee = require("../models/Employee.model");
+
+// const employeeId = "1234567890"; // The ID of the employee to update.
+
+// const newIncrement = {
+//   from: new Date("2023-06-01"),
+//   salary: 6000,
+// };
+
+// Employee.findOneAndUpdate(
+//   { _id: employeeId },
+//   { $push: { incrementSalary: newIncrement } },
+//   { new: true }
+// )
+//   .then((employee) => {
+//     if (employee) {
+//       console.log("Employee updated:", employee);
+//     } else {
+//       console.log("Employee not found.");
+//     }
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
 
 module.exports.findAll = async (req, res) => {
   try {
@@ -93,6 +123,7 @@ module.exports.findAll = async (req, res) => {
 //     return res.status(400).json(e);
 //   }
 // };
+
 module.exports.getById = async (req, res) => {
   const yearInt = parseInt(req.query.year);
   const monthInt = parseInt(req.query.month);

@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const incrementSchema = new mongoose.Schema({
+  from: { type: Date, required: true },
+  to: { type: Date },
+  salary: { type: Number, required: true },
+});
 
 const employeeSchema = new mongoose.Schema({
   name: {
@@ -22,6 +27,7 @@ const employeeSchema = new mongoose.Schema({
       ref: "Attendance",
     },
   ],
+  incrementSalary: { type: [incrementSchema], required: true },
 });
 
 module.exports = mongoose.model("Employee", employeeSchema);
