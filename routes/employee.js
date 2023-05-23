@@ -16,7 +16,8 @@ const multer = Multer({
   },
 });
 router.post("/", multer.single("file"), employeeController.create);
-
+router.put("/addsalary/:id", employeeController.addSalary);
+router.put("/editsalary/:employeeId/:salaryId", employeeController.editSalary);
 router.get("/", employeeController.findAll);
 router.get("/:id", employeeController.getById);
 

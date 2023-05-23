@@ -1,6 +1,7 @@
 const employeeService = require("../services/employee.service");
 const { google } = require("googleapis");
 const { Readable } = require("stream");
+const Employee = require("../models/Employee.model");
 
 const bufferToStream = (buffer) => {
   const stream = new Readable();
@@ -75,32 +76,57 @@ module.exports.create = async (req, res) => {
   }
 };
 
-// // update employee salary
+// add salary
+module.exports.addSalary = async (req, res) => {
+  try {
+    const employeeId = req.params.id;
+    const newSalary = req.body;
+    const employee = await Employee.findByIdAndUpdate(
+      employeeId,
+      { $push: { salary: newSalary } },
+      { new: true }
+    );
 
-// const Employee = require("../models/Employee.model");
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
 
-// const employeeId = "1234567890"; // The ID of the employee to update.
+    return res.json(employee);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
-// const newIncrement = {
-//   from: new Date("2023-06-01"),
-//   salary: 6000,
-// };
-
-// Employee.findOneAndUpdate(
-//   { _id: employeeId },
-//   { $push: { incrementSalary: newIncrement } },
-//   { new: true }
-// )
-//   .then((employee) => {
-//     if (employee) {
-//       console.log("Employee updated:", employee);
-//     } else {
-//       console.log("Employee not found.");
-//     }
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
+// update salary
+module.exports.editSalary = async (req, res) => {
+  try {
+    const { employeeId, salaryId } = req.params;
+    const { to } = req.body;
+    // Find the employee by employeeId
+    const employee = await Employee.findById(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    // Find the salary element to update by salaryId
+    const salaryIndex = employee.salary.findIndex(
+      (salary) => salary._id.toString() === salaryId
+    );
+    if (salaryIndex === -1) {
+      return res.status(404).json({ message: "Salary element not found" });
+    }
+    // Update the salary value
+    employee.salary[salaryIndex].to = to;
+    // Save the updated employee
+    await employee.save();
+    return res
+      .status(200)
+      .json({ message: "Employee salary updated successfully" });
+  } catch (err) {
+    console.error("Error updating employee salary:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports.findAll = async (req, res) => {
   try {
@@ -111,18 +137,6 @@ module.exports.findAll = async (req, res) => {
     return res.status(400).json(e);
   }
 };
-
-// module.exports.getById = async (req, res) => {
-//   try {
-//     const fetchedById = await employeeService
-//       .getById(req.params.id)
-//       .populate("attendance");
-//     return res.status(200).json(fetchedById);
-//   } catch (e) {
-//     console.error(e);
-//     return res.status(400).json(e);
-//   }
-// };
 
 module.exports.getById = async (req, res) => {
   const yearInt = parseInt(req.query.year);
